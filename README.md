@@ -13,6 +13,6 @@ A comprehensive application designed to help users track their income, expenses,
 - **FLUTTER**
 - **DART**
 - **FIREBASE**
-- 
+
 ## Status
 **Currently in Development**
