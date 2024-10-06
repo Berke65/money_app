@@ -1,16 +1,18 @@
-# money_app
+# Personal Finance Management App
 
-A new Flutter project.
+A comprehensive application designed to help users track their income, expenses, and savings effectively. The app aims to provide insights into users' financial habits and future economic conditions, with plans to incorporate AI-driven recommendations for better financial management.
 
-## Getting Started
+## Features
+- **Income Tracking**: Users can log and categorize their monthly income sources.
+- **Expense Tracking**: Easily record and manage monthly expenses to monitor spending habits.
+- **Budgeting Tools**: Set budgets for different categories and track progress.
+- **Financial Insights**: Generate reports to visualize spending trends and savings.
+- **AI Recommendations**: Future enhancements to include AI-driven tips for improving financial health and stability.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tech Stack
+- **FLUTTER**
+- **DART**
+- **FIREBASE**
+- 
+## Status
+**Currently in Development**
