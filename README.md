@@ -8,7 +8,7 @@ A comprehensive application designed to help users track their income, expenses,
 - **Budgeting Tools**: Set budgets for different categories and track progress.
 - **Financial Insights**: Generate reports to visualize spending trends and savings.
 - **AI Recommendations**: Future enhancements to include AI-driven tips for improving financial health and stability.
-- **Camera Receipt Scanning: Users can quickly scan receipt information using the integrated camera within the app, converting it to text with OCR technology, making it easy to track their expenses.
+- **Camera Receipt Scanning**: Users can quickly scan receipt information using the integrated camera within the app, converting it to text with OCR technology, making it easy to track their expenses.
 
 ## Tech Stack
 - **FLUTTER**
