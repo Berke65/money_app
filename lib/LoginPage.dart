@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_app/HomePage.dart';
+import 'package:money_app/RegisterPage.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -131,6 +132,20 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: const Text(
                         'Şifremi unuttum?',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegisterPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Hala aramıza katılmadın mı?',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
