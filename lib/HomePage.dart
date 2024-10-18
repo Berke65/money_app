@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:money_app/statistics.dart';
 
 void main() {
   runApp(const HomePage());
@@ -74,10 +75,10 @@ class _HomePageState extends State<HomePage> {
     },
   ];
 
-  String amount = "0.00";
-  String selectedTip = "cash";
-  String selectedCategory = "Food";
-  String selectedCurrency = "\$"; // Başlangıç para birimi
+  String selectedCategory = 'Seçiniz';
+  String amount = '';
+  String paymentMethod = 'Cash'; // Default olarak 'Cash' seçili
+  final List<String> categories = ['Seçiniz', 'Kategori 1', 'Kategori 2', 'Kategori 3'];
 
   @override
   Widget build(BuildContext context) {
@@ -98,13 +99,13 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
-          onPressed: _showAddExpensePopup,
+          onPressed: () => _showBottomSheet(context),
           child: const Icon(
             Icons.add,
             color: Colors.white,
           ),
         ),
-        bottomNavigationBar: buildBottomAppBar(),
+        bottomNavigationBar: buildBottomAppBar(context),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -230,87 +231,45 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildBottomAppBar() {
+  Widget buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
       color: Colors.black,
       elevation: 0.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          InkWell(
-            onTap: () {
-              // this page
-            },
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.home,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                Text(
-                  'AnaSayfa',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            width: 1,
-            height: 30,
-            color: Colors.white,
-          ),
-          InkWell(
-            onTap: () {
-              // yönlendirme işlemleri
-            },
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.data_array,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                Text(
-                  'İstatistik',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            width: 1,
-            height: 30,
-            color: Colors.white,
-          ),
-          InkWell(
-            onTap: () {
-              // yönlendirme işlemleri
-            },
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.person_2_outlined,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                Text(
-                  'Hesabım',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+          _buildBottomNavItem(context, Icons.home, 'AnaSayfa', () {
+            // AnaSayfa'ya yönlendirme
+          }),
+          _buildBottomNavItem(context, Icons.show_chart, 'İstatistik', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const StatisticsPage(),
+              ),
+            );
+          }),
+          _buildBottomNavItem(context, Icons.person_2_outlined, 'Hesabım', () {
+            // Hesabım sayfasına yönlendirme
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNavItem(BuildContext context, IconData icon, String label, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 24, color: Colors.white),
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 12, // Font boyutu küçültüldü
             ),
           ),
         ],
@@ -318,137 +277,156 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showAddExpensePopup() {
+  void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          height: 500,
-          child: Column(
-            children: [
-              // Kategoriler
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              padding: const EdgeInsets.only(
+                left: 24,
+                right: 24,
+                bottom: 24,
+                top: 32,
+              ),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  DropdownButton<String>(
-                    items: <String>['Food', 'Transport', 'Shopping', 'Entertainment']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      // Kategori seçimi
-                    },
-                    hint: const Text("Select Category"),
+                  const Icon(
+                    Icons.add_circle_outline,
+                    size: 48,
+                    color: Colors.blue,
+                  ), // Larger, outlined add icon
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Yeni Harcama Ekle',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          selectedTip = "cash";
-                        }),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: selectedTip == "cash" ? Colors.blue[100] : Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text("Cash", style: TextStyle(fontSize: 18)),
+                  const SizedBox(height: 24),
+                  // Category Selection with Icon
+                  DropdownButtonFormField<String>(
+                    value: selectedCategory,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.category), // Category icon
+                      labelText: 'Kategori',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ), // Rounded border
+                      filled: true,
+                      fillColor: Colors.grey[200], // Soft background color
+                    ),
+                    items: categories
+                        .map((category) => DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCategory = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Amount Input with Icon
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.attach_money), // Amount icon
+                      labelText: 'Miktar',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        amount = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Payment Method Selection with Icons
+                  const Text(
+                    'Ödeme Yöntemi',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ToggleButtons(
+                    isSelected: [
+                      paymentMethod == 'Cash',
+                      paymentMethod == 'Card'
+                    ],
+                    onPressed: (int index) {
+                      setState(() {
+                        paymentMethod = index == 0 ? 'Cash' : 'Card';
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    fillColor: Colors.blue[100], // Soft fill color
+                    selectedColor: Colors.blue,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.money),
+                            SizedBox(width: 8),
+                            Text('Nakit'),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          selectedTip = "card";
-                        }),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: selectedTip == "card" ? Colors.blue[100] : Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text("Card", style: TextStyle(fontSize: 18)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.credit_card),
+                            SizedBox(width: 8),
+                            Text('Kart'),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Text(
-                '$selectedCurrency$amount',
-                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.5,
-                  children: List.generate(12, (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (index < 9) {
-                            amount = (int.parse(amount.replaceAll("\$", "").replaceAll(",", "")) * 10 + (index + 1)).toString();
-                            amount = amount.padLeft(5, '0');
-                          } else if (index == 9) {
-                            // Silme işlemi
-                            amount = amount.length > 4 ? amount.substring(0, amount.length - 1) : "0.00";
-                          }
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(4),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          index < 9 ? (index + 1).toString() : '⌫', // Silme butonu
-                          style: const TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Para birimini değiştir
-                      setState(() {
-                        selectedCurrency = selectedCurrency == "\$" ? "€" : "\$"; // $ ile € arasında geçiş
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.blue[100],
+                  const SizedBox(height: 32),
+
+                  // "Tamam" Button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      textStyle: const TextStyle(fontSize: 16),
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Text("Change Currency", style: TextStyle(fontSize: 18)),
                     ),
-                  ),
-                  ElevatedButton(
                     onPressed: () {
-                      // Harcamayı ekleme mantığı
                       Navigator.pop(context);
+                      // Handle submission logic here
                     },
-                    child: const Text("✓"), // Onay butonu
+                    child: const Text('Tamam'),
                   ),
+                  const SizedBox(height: 24),
                 ],
-              )
-            ],
-          ),
+              ),
+            );
+          },
         );
       },
     );
