@@ -9,6 +9,7 @@ A comprehensive application designed to help users track their income, expenses,
 - **Financial Insights**: Generate reports to visualize spending trends and savings.
 - **AI Recommendations**: Future enhancements to include AI-driven tips for improving financial health and stability.
 - **Camera Receipt Scanning**: Users can quickly scan receipt information using the integrated camera within the app, converting it to text with OCR technology, making it easy to track their expenses.
+- **Piggy Bank Concept:** Users can create a piggy bank to save money towards a specific goal. This piggy bank encourages users to save in order to reach their objectives and helps them manage their savings in a more organized manner.
 
 ## Tech Stack
 - **FLUTTER**
